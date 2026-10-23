@@ -10,3 +10,6 @@ router/uvcstream/build/
 # NVR data
 frigate/storage/
 frigate/config/*.db
+# Frigate runtime state (auth secret, database, model cache, backups)
+frigate/config/*
+!frigate/config/config.yml

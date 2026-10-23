@@ -5,8 +5,6 @@ services:
     restart: unless-stopped
     privileged: false
     shm_size: "256mb"
-    devices:
-      - /dev/dri/renderD128:/dev/dri/renderD128 # Intel iGPU: VAAPI decode/encode + OpenVINO
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./config:/config

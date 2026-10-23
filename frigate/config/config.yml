@@ -4,7 +4,7 @@ mqtt:
 detectors:
   ov:
     type: openvino
-    device: GPU
+    device: CPU
 
 # SSDLite MobileNet v2 bundled with the Frigate image
 model:
@@ -18,14 +18,13 @@ model:
 go2rtc:
   streams:
     # The router sends MJPEG; go2rtc transcodes it once to H.264 on the iGPU
-    # so recordings are compact and playable in the browser/phone.
+    # (software x264; this laptop has no usable iGPU) so recordings are compact and playable in the browser/phone.
     room:
-      - "ffmpeg:{FRIGATE_CAM_URL}#video=h264#hardware"
+      - "ffmpeg:{FRIGATE_CAM_URL}#video=h264"
 
 cameras:
   room:
     ffmpeg:
-      hwaccel_args: preset-vaapi
       inputs:
         - path: rtsp://127.0.0.1:8554/room
           input_args: preset-rtsp-restream
