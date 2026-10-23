@@ -1,0 +1,59 @@
+mqtt:
+  enabled: false
+
+detectors:
+  ov:
+    type: openvino
+    device: GPU
+
+# SSDLite MobileNet v2 bundled with the Frigate image
+model:
+  width: 300
+  height: 300
+  input_tensor: nhwc
+  input_pixel_format: bgr
+  path: /openvino-model/ssdlite_mobilenet_v2.xml
+  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+
+go2rtc:
+  streams:
+    # The router sends MJPEG; go2rtc transcodes it once to H.264 on the iGPU
+    # so recordings are compact and playable in the browser/phone.
+    room:
+      - "ffmpeg:{FRIGATE_CAM_URL}#video=h264#hardware"
+
+cameras:
+  room:
+    ffmpeg:
+      hwaccel_args: preset-vaapi
+      inputs:
+        - path: rtsp://127.0.0.1:8554/room
+          input_args: preset-rtsp-restream
+          roles: [detect, record]
+    detect:
+      width: 1280
+      height: 720
+      fps: 5
+    objects:
+      track: [person, dog, cat]
+    record:
+      enabled: true
+      continuous:
+        days: 0
+      motion:
+        days: 3
+      alerts:
+        retain:
+          days: 30
+      detections:
+        retain:
+          days: 14
+    snapshots:
+      enabled: true
+      retain:
+        default: 30
+
+face_recognition:
+  enabled: false # enable once faces are enrolled
+
+version: 0.18-0

@@ -50,7 +50,8 @@ device). Port 8080 is taken by the router's LuCI web server, so the default is 8
 ## Roadmap
 
 - [x] Webcam streaming from the router on stock firmware
-- [ ] Frigate (Docker) consuming the stream; person detection + recording
+- [x] Camera router in repeater mode (battery-movable) + Tailscale
+- [ ] Frigate (Docker) consuming the stream; person detection + recording — `frigate/`
 - [ ] Phone notifications
 - [ ] Remote access over Tailscale
 - [ ] Face recognition ("your wife arrived home")
