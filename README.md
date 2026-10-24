@@ -47,13 +47,25 @@ make install ROUTER=192.168.8.1
 Settings live in `/etc/config/uvcstream` on the router (port, width, height, fps,
 device). Port 8080 is taken by the router's LuCI web server, so the default is 8081.
 
+## Frigate, remote access and notifications
+
+```sh
+cd frigate && cp .env.example .env   # set FRIGATE_CAM_URL
+docker compose up -d
+sudo tailscale serve --bg https+insecure://localhost:8971   # valid HTTPS on <host>.<tailnet>.ts.net
+```
+
+Phone (iOS): install Tailscale, open `https://<host>.<tailnet>.ts.net` in Safari,
+**Share → Add to Home Screen**, open it from the icon, then **Settings → Notifications →
+Register**. Only `person` raises alerts/notifications (see `review.alerts.labels`).
+
 ## Roadmap
 
 - [x] Webcam streaming from the router on stock firmware
 - [x] Camera router in repeater mode (battery-movable) + Tailscale
-- [ ] Frigate (Docker) consuming the stream; person detection + recording — `frigate/`
-- [ ] Phone notifications
-- [ ] Remote access over Tailscale
+- [x] Frigate (Docker) consuming the stream; person detection + recording — `frigate/`
+- [x] Phone notifications (Frigate native web push)
+- [x] Remote access over Tailscale (`tailscale serve`)
 - [ ] Face recognition ("your wife arrived home")
 
 ## License
