@@ -42,7 +42,13 @@ install: $(BUILD)/uvcstream
 	ssh root@$(ROUTER) '[ -f /etc/config/uvcstream ] || cat > /etc/config/uvcstream' < files/uvcstream.config
 	ssh root@$(ROUTER) '/etc/init.d/uvcstream enable && /etc/init.d/uvcstream restart'
 
+# Removes everything `make install` added (binary, service, config, sysupgrade entries).
+uninstall:
+	ssh root@$(ROUTER) '/etc/init.d/uvcstream stop; /etc/init.d/uvcstream disable; \
+		rm -f /usr/bin/uvcstream /etc/init.d/uvcstream /etc/config/uvcstream; \
+		sed -i "/uvcstream/d" /etc/sysupgrade.conf'
+
 clean:
 	rm -rf $(BUILD)
 
-.PHONY: all install clean
+.PHONY: all install uninstall clean
