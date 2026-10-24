@@ -20,7 +20,7 @@ go2rtc:
     # The router sends MJPEG; go2rtc transcodes it once to H.264 on the iGPU
     # (software x264; this laptop has no usable iGPU) so recordings are compact and playable in the browser/phone.
     room:
-      - "ffmpeg:{FRIGATE_CAM_URL}#video=h264"
+      - ffmpeg:{FRIGATE_CAM_URL}#video=h264
 
 cameras:
   room:
@@ -52,7 +52,24 @@ cameras:
       retain:
         default: 30
 
+# Native Web Push (iOS: add Frigate to Home Screen, then Settings > Notifications).
+# Requires HTTPS with a valid cert, provided by `tailscale serve`.
+notifications:
+  enabled: true
+  email: nvr-admin@example.com # VAPID contact sent to push services; placeholder by choice
+  cooldown: 30
+
+# Only people raise "alerts" (and therefore notifications); dogs/cats stay detections.
+review:
+  alerts:
+    labels: [person]
+
 face_recognition:
   enabled: false # enable once faces are enrolled
 
 version: 0.18-0
+camera_groups:
+  Santa_Fe:
+    order: 1
+    icon: LuCarFront
+    cameras: room
